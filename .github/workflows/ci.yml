@@ -24,6 +24,8 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build
+
+      
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
       image: abithkumar/abi_repo
