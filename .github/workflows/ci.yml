@@ -25,10 +25,16 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Build and Push Docker Image
-      uses: docker/build-push-action@v2
-      with:
-      image: abithkumar/demo-app
-      registry: docker.io
+    - name: Build and push Docker image
+  uses: docker/build-push-action@v2
+  with:
+    context: .
+    push: ${{ 
+      github.event.base_ref =='refs/heads/main' && 
+      github.ref_type == 'tag' && 
+      !startsWith(github.ref, 'refs/tags/v0.') 
+    }}
+    tags: ${{ steps.metadata.outputs.tags }}
+    labels: ${{ steps.metadata.outputs.labels }}
       username: ${{ secrets.DOCKER_USERNAME }}
       password: ${{ secrets.DOCKER_PASSWORD }}
